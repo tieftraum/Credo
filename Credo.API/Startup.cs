@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Credo.API.Extensions;
+using Credo.Domain.Interfaces;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -22,16 +24,15 @@ namespace Credo.API
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Credo Bank Example", Version = "v1" });
-            });
+            //Little bit of Reflection to automate tedious tasks.
+            services.InstallServices(Configuration);
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -50,6 +51,7 @@ namespace Credo.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
