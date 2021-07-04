@@ -1,4 +1,5 @@
-﻿using Credo.Domain.Interfaces;
+﻿using System;
+using Credo.Domain.Interfaces;
 using Credo.Domain.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,7 @@ namespace Credo.API.Installers
         {
             var jwtSettings = configuration.GetSection(nameof(JwtSettings));
             services.Configure<JwtSettings>(jwtSettings);
+            services.AddOptions<JwtSettings>().Bind(configuration);
 
             services.AddAuthentication(authOpts =>
             {
@@ -33,7 +35,8 @@ namespace Credo.API.Installers
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     RequireExpirationTime = false,
-                    ValidateLifetime = true
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 

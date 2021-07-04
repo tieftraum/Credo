@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Credo.Domain.Response;
 
 namespace Credo.Infrastructure.Data.Repositories
 {
@@ -23,6 +24,12 @@ namespace Credo.Infrastructure.Data.Repositories
             await using var conn = new SqlConnection(_dapperService.GetCredoApiConnectionString());
             return await conn.QueryFirstOrDefaultAsync<UserReadDto>(query, new {id});
         }
+        public async Task<UserReadDto> GetUserByPersonalNumber(string personalNumber)
+        {
+            const string query = @"SELECT * FROM [CredoAPI].[dbo].[Users] WHERE PersonalNumber = @personalNumber";
+            await using var conn = new SqlConnection(_dapperService.GetCredoApiConnectionString());
+            return await conn.QueryFirstOrDefaultAsync<UserReadDto>(query, new { personalNumber });
+        }
         public async Task<IEnumerable<UserReadDto>> GetUsers(int amount)
         {
             const string query = @"SELECT TOP (@amount) * FROM [CredoAPI].[dbo].[Users]";
@@ -36,5 +43,6 @@ namespace Credo.Infrastructure.Data.Repositories
             await using var conn = new SqlConnection(_dapperService.GetCredoApiConnectionString());
             return await conn.ExecuteScalarAsync<int>(command, user);
         }
+        
     }
 }
