@@ -1,4 +1,6 @@
-﻿namespace Credo.Domain.Options
+﻿using Credo.Domain.Interfaces.IoC;
+
+namespace Credo.Domain.Options
 {
     public class JwtSettings
     {

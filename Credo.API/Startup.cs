@@ -1,18 +1,12 @@
+using Credo.API.Extensions;
+using Credo.Domain.Interfaces.Repositories;
+using Credo.Domain.Interfaces.Services;
+using Credo.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Credo.API.Extensions;
-using Credo.Domain.Interfaces;
-using Microsoft.OpenApi.Models;
 using Serilog;
 
 namespace Credo.API
@@ -33,6 +27,8 @@ namespace Credo.API
             //Little bit of Reflection to automate tedious tasks.
             services.InstallServices(Configuration);
 
+            //Reflection here also in order to register IoC containers
+            services.AddConventionalServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
