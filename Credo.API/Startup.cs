@@ -41,6 +41,8 @@ namespace Credo.API
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Credo Bank Example API"));
 
+            app.ConfigureExceptionHandler();
+
             app.UseHttpsRedirection();
 
             app.UseSerilogRequestLogging();
