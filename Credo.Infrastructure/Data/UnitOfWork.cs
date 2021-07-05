@@ -18,5 +18,6 @@ namespace Credo.Infrastructure.Data
         }
 
         public IUserRepository UserRepository => new UserRepository(_dapperService);
+        public ILoanRepository LoanRepository => new LoanRepository(_dapperService);
     }
 }

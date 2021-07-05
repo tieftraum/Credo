@@ -4,7 +4,10 @@ using Credo.Domain.Dtos.Commands;
 using Credo.Domain.Interfaces;
 using Credo.Domain.Interfaces.Repositories;
 using Credo.Domain.Interfaces.Services;
+using Credo.Domain.Options;
 using Credo.Domain.Response;
+using Credo.Infrastructure.Helpers;
+using Microsoft.Extensions.Options;
 
 namespace Credo.Infrastructure.Services
 {
@@ -12,11 +15,13 @@ namespace Credo.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenService _tokenService;
+        private readonly IOptions<PasswordHasherSettings> _passwordHasherOptions;
 
-        public AuthService(IUnitOfWork unitOfWork, ITokenService tokenService)
+        public AuthService(IUnitOfWork unitOfWork, ITokenService tokenService, IOptions<PasswordHasherSettings> passwordHasherOptions)
         {
             _unitOfWork = unitOfWork;
             _tokenService = tokenService;
+            _passwordHasherOptions = passwordHasherOptions;
         }
         public async Task<AuthenticationResult> RegisterAsync(UserCreateDto model)
         {
@@ -32,6 +37,10 @@ namespace Credo.Infrastructure.Services
                     }
                 };
             }
+
+            //Password Encryption
+            var encryptedPassword = PasswordHasher.Encrypt(model.Password, _passwordHasherOptions.Value.Key);
+            model.Password = encryptedPassword;
 
             var newUserId = await _unitOfWork.UserRepository.AddUser(model);
 
@@ -69,7 +78,10 @@ namespace Credo.Infrastructure.Services
                 };
             }
 
-            if (password != userToLogin.Password)
+            //Password Decryption
+            var decryptedPassword = PasswordHasher.Decrypt(userToLogin.Password, _passwordHasherOptions.Value.Key);
+
+            if (password != decryptedPassword)
             {
                 return new AuthenticationResult
                 {

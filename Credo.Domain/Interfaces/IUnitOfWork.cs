@@ -9,5 +9,6 @@ namespace Credo.Domain.Interfaces
     public interface IUnitOfWork : IScoped
     {
         public IUserRepository UserRepository { get;}
+        public ILoanRepository LoanRepository { get; }
     }
 }
