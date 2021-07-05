@@ -27,6 +27,7 @@ namespace Credo.API.Controllers
         [HttpPost(nameof(Register))]
         public async Task<IActionResult> Register([FromBody] UserCreateDto model)
         {
+            //I know its better to use separate model than UserCreateDto but it's for simplicity
             var registerResult = await _authService.RegisterAsync(model);
 
             if (!registerResult.Success)

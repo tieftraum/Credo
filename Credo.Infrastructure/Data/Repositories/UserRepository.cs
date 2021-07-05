@@ -41,7 +41,7 @@ namespace Credo.Infrastructure.Data.Repositories
         }
         public async Task<int> AddUser(UserCreateDto model)
         {
-            const string command = "INSERT INTO [CredoAPI].[Users].[Users] (Firstname, Lastname, PersonalNumber, Password, DoB, Country, City, Address, CreatedAt) Values (@Firstname, @Lastname, @PersonalNumber, @Password, @DoB, @Country, @City, @Address, @CreatedAt); SELECT CAST(SCOPE_IDENTITY() as int)";
+            const string command = "INSERT INTO [CredoAPI].[Users].[Users] (Firstname, Lastname, PersonalNumber, Password, DoB, Country, City, Address, IsDeleted, CreatedAt) Values (@Firstname, @Lastname, @PersonalNumber, @Password, @DoB, @Country, @City, @Address, @IsDeleted, @CreatedAt); SELECT CAST(SCOPE_IDENTITY() as int)";
 
             await using var conn = new SqlConnection(_dapperService.GetCredoApiConnectionString());
             return await conn.ExecuteScalarAsync<int>(command, model);

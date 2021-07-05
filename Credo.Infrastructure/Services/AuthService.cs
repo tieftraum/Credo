@@ -73,7 +73,7 @@ namespace Credo.Infrastructure.Services
                 {
                     ErrorMessages = new List<string>
                     {
-                        "User with this personal number doesn't exist"
+                        "Personal number or password invalid"
                     }
                 };
             }
